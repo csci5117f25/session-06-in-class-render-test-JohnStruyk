@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+psycopg = {extras = ["pool", "binary"], version = "*"}
 flask = "*"
 gunicorn = "*"
 

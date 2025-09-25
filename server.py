@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
-import db  # your helper file above
+import db
 
 app = Flask(__name__)
 
-@app.before_first_request
+@app.before_request
 def init_db():
     db.setup()
     with db.get_db_cursor(True) as cur:

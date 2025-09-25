@@ -1,34 +1,30 @@
-""" database access helpers """
-
-from contextlib import contextmanager
 import os
-from flask import current_app
-from psycopg2.pool import ThreadedConnectionPool
-from psycopg2.extras import DictCursor
+import psycopg
+from psycopg_pool import ConnectionPool
 
-pool = None
+def _dsn() -> str:
+    dsn = os.environ["DATABASE_URL"]
+    if "sslmode=" not in dsn:
+        dsn += ("&sslmode=require" if "?" in dsn else "?sslmode=require")
+    return dsn
 
-def setup():
+pool: ConnectionPool | None = None
+
+def setup_pool():
     global pool
-    DATABASE_URL = os.environ["DATABASE_URL"]
-    current_app.logger.info("Creating DB connection pool")
-    pool = ThreadedConnectionPool(1, 10, dsn=DATABASE_URL, sslmode="require")
+    if pool is None:
+        pool = ConnectionPool(conninfo=_dsn())
 
-@contextmanager
-def get_db_connection():
-    conn = pool.getconn()
-    try:
-        yield conn
-    finally:
-        pool.putconn(conn)
-
-@contextmanager
-def get_db_cursor(commit=False):
-    with get_db_connection() as conn:
-        cur = conn.cursor(cursor_factory=DictCursor)
-        try:
-            yield cur
-            if commit:
-                conn.commit()
-        finally:
-            cur.close()
+def init_schema():
+    sql = """
+    CREATE TABLE IF NOT EXISTS guests (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        message TEXT NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    """
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+        conn.commit()

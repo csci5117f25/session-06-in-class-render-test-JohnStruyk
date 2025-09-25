@@ -1,25 +1,32 @@
 <!doctype html>
-<html>
-<head><title>Guest List</title></head>
-<body>
-  <h1>Guest List</h1>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Guest List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  </head>
+  <body>
+    <h1>Guest List</h1>
 
-  <form action="{{ url_for('submit_guest') }}" method="post">
-    <label for="name">Name:</label><br>
-    <input id="name" name="name" required><br>
-    <label for="message">Message:</label><br>
-    <input id="message" name="message" required><br>
-    <button type="submit">Submit</button>
-  </form>
+    <form action="{{ url_for('submit_guest') }}" method="post" style="margin-bottom:1rem;">
+      <label for="name">Name</label><br>
+      <input id="name" name="name" required />
+      <br><br>
+      <label for="message">Message</label><br>
+      <input id="message" name="message" required />
+      <br><br>
+      <button type="submit">Sign</button>
+    </form>
 
-  {% if guests %}
-    <ol>
-      {% for guest in guests %}
-        <li><strong>{{ guest.name }}</strong>: {{ guest.message }}</li>
-      {% endfor %}
-    </ol>
-  {% else %}
-    <p>No guests yet.</p>
-  {% endif %}
-</body>
+    {% if guests and guests|length > 0 %}
+      <ol>
+        {% for name, message in guests %}
+          <li><strong>{{ name }}</strong>: {{ message }}</li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p>No guests yet—be the first!</p>
+    {% endif %}
+  </body>
 </html>
