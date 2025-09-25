@@ -1,21 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-
-    <title>Hi!</title>
-</head>
+<!doctype html>
+<html>
+<head><title>Guest List</title></head>
 <body>
-    
-<h1>Hello from Render</h1>
-{% if name %}
-<h2>and hello to {{name}}</h2>
-{% endif %}
-<button id="myButton">Click me!</button>
-<div id="myMessage" style="display: none;">You clicked the button!</div>
-<script src="/static/script.js"></script>
+  <h1>Guest List</h1>
+
+  <form action="{{ url_for('submit_guest') }}" method="post">
+    <label for="name">Name:</label><br>
+    <input id="name" name="name" required><br>
+    <label for="message">Message:</label><br>
+    <input id="message" name="message" required><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  {% if guests %}
+    <ol>
+      {% for guest in guests %}
+        <li><strong>{{ guest.name }}</strong>: {{ guest.message }}</li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p>No guests yet.</p>
+  {% endif %}
 </body>
 </html>
