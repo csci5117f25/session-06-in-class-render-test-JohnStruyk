@@ -1,6 +1,8 @@
+-- schema.sql — Session06 guest list
 CREATE TABLE IF NOT EXISTS guests (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+

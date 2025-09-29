@@ -9,24 +9,28 @@
   <body>
     <h1>Guest List</h1>
 
-    <form action="{{ url_for('submit_guest') }}" method="post" style="margin-bottom:1rem;">
-      <label for="name">Name</label><br>
-      <input id="name" name="name" required />
-      <br><br>
-      <label for="message">Message</label><br>
-      <input id="message" name="message" required />
-      <br><br>
-      <button type="submit">Sign</button>
+    <form method="POST" action="{{ url_for('submit_guest') }}">
+      <div>
+        <label for="name">Name</label>
+        <input id="name" name="name" required>
+      </div>
+      <div>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="3" required></textarea>
+      </div>
+      <button type="submit">Sign Guestbook</button>
     </form>
 
-    {% if guests and guests|length > 0 %}
-      <ol>
-        {% for name, message in guests %}
-          <li><strong>{{ name }}</strong>: {{ message }}</li>
-        {% endfor %}
-      </ol>
-    {% else %}
-      <p>No guests yet—be the first!</p>
-    {% endif %}
+    <h2>Entries</h2>
+    <ol>
+      {% for row in guests %}
+        <li>
+          <span class="name">{{ row['name'] }}</span>:
+          <span class="msg">{{ row['message'] }}</span>
+        </li>
+      {% else %}
+        <li>No entries yet — be the first!</li>
+      {% endfor %}
+    </ol>
   </body>
 </html>

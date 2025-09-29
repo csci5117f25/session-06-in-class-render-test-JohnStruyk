@@ -7,6 +7,8 @@ name = "pypi"
 psycopg = {extras = ["pool", "binary"], version = "*"}
 flask = "*"
 gunicorn = "*"
+python-dotenv = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
